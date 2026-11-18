@@ -1,0 +1,27 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'pe.mitv'
+    compileSdk 34
+    defaultConfig { applicationId 'pe.mitv.deportes'; minSdk 21; targetSdk 34; versionCode 7; versionName '4.3' }
+    sourceSets { main { assets.srcDirs = ['../../www'] } }   // la carpeta www/ se empaqueta tal cual
+    signingConfigs {
+        fijo {   // firma fija: las nuevas versiones se instalan ENCIMA de la anterior sin desinstalar
+            storeFile file('mitv.keystore'); storePassword 'mitv2026'; keyAlias 'mitv'; keyPassword 'mitv2026'
+        }
+    }
+    buildTypes {
+        release { minifyEnabled false; signingConfig signingConfigs.fijo }
+        debug { signingConfig signingConfigs.fijo }
+    }
+    lint { abortOnError false; checkReleaseBuilds false }
+}
+
+dependencies {
+    // Reproductor nativo ExoPlayer (Media3): decodifica por hardware y no depende del navegador interno
+    // Todas las piezas Media3 con la MISMA versión (1.4.1: estable y compatible con compileSdk 34 / Android 14)
+    implementation 'androidx.media3:media3-common:1.4.1'
+    implementation 'androidx.media3:media3-exoplayer:1.4.1'
+    implementation 'androidx.media3:media3-exoplayer-hls:1.4.1'
+    implementation 'androidx.media3:media3-extractor:1.4.1'
+    implementation 'androidx.media3:media3-datasource:1.4.1'
+}
